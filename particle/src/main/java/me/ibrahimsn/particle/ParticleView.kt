@@ -12,6 +12,7 @@ import kotlin.math.min
 import kotlin.math.sqrt
 import kotlin.random.Random
 
+
 class ParticleView : SurfaceView, SurfaceHolder.Callback {
 
     private val particles = mutableListOf<Particle>()
@@ -109,6 +110,11 @@ class ParticleView : SurfaceView, SurfaceHolder.Callback {
         private var canvas: Canvas? = null
 
         override fun run() {
+            if (width == 0 || height == 0) {
+                running = false
+                return
+            }
+
             if (!hasSetup) {
                 hasSetup = true
                 for (i in 0 until particleCount) {
@@ -129,7 +135,7 @@ class ParticleView : SurfaceView, SurfaceHolder.Callback {
                 try {
                     canvas = holder.lockCanvas()
 
-                    synchronized (holder) {
+                    synchronized(holder) {
                         canvas?.drawColor(background)
 
                         for (i in 0 until particleCount) {
@@ -159,7 +165,12 @@ class ParticleView : SurfaceView, SurfaceHolder.Callback {
                             }
 
                             paintParticles.alpha = particles[i].alpha
-                            canvas?.drawCircle(particles[i].x, particles[i].y, particles[i].radius, paintParticles)
+                            canvas?.drawCircle(
+                                particles[i].x,
+                                particles[i].y,
+                                particles[i].radius,
+                                paintParticles
+                            )
                         }
                     }
 
